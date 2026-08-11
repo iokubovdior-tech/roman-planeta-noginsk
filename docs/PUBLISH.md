@@ -1,53 +1,51 @@
-# Как выложить сайт в интернет
+# Выложить сайт (просто, по шагам)
 
-Сайт готов локально. Чтобы его видели клиенты, нужны **хостинг** (бесплатно на старте) и по желанию **домен** (~200–400 ₽/год за `.ru`).
+Сайт уже готов на компьютере. Нужны бесплатные аккаунты **GitHub** и **Vercel**.
 
-## Вариант A — Vercel (рекомендую)
+---
 
-### 1. Аккаунт
-1. Откройте https://vercel.com/signup  
-2. Зарегистрируйтесь через Google или GitHub (удобнее).
+## Экран Install (Vercel → GitHub)
 
-### 2. Загрузка проекта
-**Через сайт Vercel (проще без Git):**
-1. Dashboard → **Add New…** → **Project**
-2. **Upload** папку проекта `roman-planeta-noginsk`  
-   (или подключите GitHub-репозиторий, если уже есть)
-3. Framework: **Next.js** (определится сам)
-4. **Deploy**
+Если видите **Install on your personal account** и выбор репозиториев:
 
-Через несколько минут появится ссылка вида:
-`https://roman-planeta-noginsk.vercel.app`
+1. Выберите **All repositories** (проще на старте).
+2. Нажмите зелёную кнопку **Install** / **Install & Authorize** внизу.
+3. Дождитесь возврата на Vercel.
 
-Её уже можно ставить в закреп VK (временно, до своего домена).
+*(«Only select repositories» тоже можно — тогда потом отметьте свой репозиторий.)*
 
-### 3. Свой домен `.ru`
-1. Купите домен у регистратора (Reg.ru, Timeweb, Beget…)
-2. В Vercel: Project → **Settings** → **Domains** → добавьте домен
-3. У регистратора укажите DNS-записи, которые покажет Vercel (обычно A / CNAME)
+---
 
-Примеры имён:
-- `roman-noginsk.ru`
-- `yamnikov-planeta.ru`
-- `rieltor-roman.ru`
-- `planeta-roman.ru`
+## Создать пустой репозиторий на GitHub
 
-## Вариант B — через GitHub + Vercel
-1. Установите Git: https://git-scm.com/download/win  
-2. Создайте репозиторий на GitHub  
-3. Залейте проект  
-4. В Vercel: Import Git Repository → Deploy  
+1. Откройте: https://github.com/new  
+2. **Repository name:** `roman-planeta-noginsk`  
+3. Оставьте **Public**  
+4. **Не** ставьте галочки README / .gitignore / license (репозиторий должен быть пустым)  
+5. Нажмите **Create repository**  
+6. Скопируйте ссылку вида:  
+   `https://github.com/iokubovdior-tech/roman-planeta-noginsk`  
+7. Пришлите эту ссылку в чат — сайт зальём с компьютера.
 
-Так проще обновлять сайт потом: изменили файлы → push → сайт обновился.
+---
 
-## После публикации
-1. Вставьте ссылку в закреп VK (`docs/VK-zakrep.md`)
-2. Добавьте ссылку на Яндекс Карты (офис: Рабочая, 20)
-3. Подключите Яндекс.Метрику (счётчик в `layout.tsx`)
+## Потом (сделаем вместе)
 
-## Локальный запуск (как сейчас)
+1. Залить код на GitHub (`git push`).  
+2. На Vercel: **Import** этот репозиторий → **Deploy**.  
+3. Получите ссылку `https://….vercel.app` для VK.
+
+### Важно про оплату
+Если Vercel просит **$20** — выберите тариф **Hobby / Personal** (личное), не Pro.  
+Платить не нужно для старта.
+
+---
+
+## Локально (уже работает)
+
 ```powershell
 cd C:\Users\Roman\roman-planeta-noginsk
 npm run dev
 ```
+
 Открыть: http://localhost:3000
