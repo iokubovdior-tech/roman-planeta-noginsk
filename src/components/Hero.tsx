@@ -14,7 +14,7 @@ export function Hero({ imageSrc }: HeroProps) {
           alt=""
           fill
           priority
-          quality={90}
+          quality={92}
           sizes="100vw"
           className="animate-ken object-cover object-center"
         />
