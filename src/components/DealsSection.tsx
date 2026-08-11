@@ -119,7 +119,7 @@ export function DealsSection({ deals }: DealsSectionProps) {
         <div className="grid items-stretch gap-0 overflow-hidden border border-[var(--line)] bg-[var(--white)] lg:grid-cols-[1.15fr_0.85fr]">
           <button
             type="button"
-            className="group relative aspect-[4/3] w-full overflow-hidden bg-[var(--paper-deep)] text-left lg:aspect-auto lg:min-h-[420px]"
+            className="group relative min-h-[380px] w-full overflow-hidden bg-[var(--paper-deep)] text-left sm:min-h-[460px] lg:min-h-[520px]"
             onClick={() => setDetail(deal)}
             aria-label={`Подробнее: ${deal.title}`}
           >
@@ -129,8 +129,9 @@ export function DealsSection({ deals }: DealsSectionProps) {
                 src={deal.image}
                 alt=""
                 fill
-                sizes="(max-width: 1024px) 100vw, 58vw"
-                className="animate-slide-fade object-cover transition duration-700 group-hover:scale-[1.02]"
+                quality={92}
+                sizes="(max-width: 1024px) 100vw, 60vw"
+                className="animate-slide-fade object-contain object-center p-2 transition duration-700 sm:p-3"
               />
             ) : null}
             <span className="absolute left-4 top-4 bg-[var(--accent)] px-3 py-1.5 text-xs font-semibold tracking-wide text-[var(--button-ink)] uppercase">
@@ -228,9 +229,16 @@ export function DealsSection({ deals }: DealsSectionProps) {
             className="max-h-[92vh] w-full max-w-2xl overflow-y-auto bg-[var(--white)] shadow-[var(--shadow)] sm:rounded-sm"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative aspect-[16/10] bg-[var(--paper-deep)]">
+            <div className="relative min-h-[320px] bg-[var(--paper-deep)] sm:min-h-[420px]">
               {detail.image ? (
-                <Image src={detail.image} alt="" fill sizes="800px" className="object-cover" />
+                <Image
+                  src={detail.image}
+                  alt=""
+                  fill
+                  quality={92}
+                  sizes="(max-width: 768px) 100vw, 800px"
+                  className="object-contain object-center p-3"
+                />
               ) : null}
               <button
                 type="button"

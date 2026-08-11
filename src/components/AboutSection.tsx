@@ -10,8 +10,9 @@ export function AboutSection() {
             src={SITE.aboutPhoto}
             alt={`${SITE.name}, агент недвижимости «${SITE.agency}»`}
             fill
+            quality={92}
             sizes="(max-width: 1024px) 90vw, 40vw"
-            className="object-cover object-[center_18%]"
+            className="object-cover object-[center_22%]"
           />
         </div>
 
