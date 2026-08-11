@@ -22,13 +22,13 @@ export function Hero({ imageSrc }: HeroProps) {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(180deg, rgba(12,18,24,0.64) 0%, rgba(12,18,24,0.42) 40%, rgba(12,18,24,0.9) 100%), linear-gradient(95deg, rgba(12,18,24,0.8) 0%, rgba(12,18,24,0.32) 58%, rgba(138,106,44,0.28) 100%)",
+              "linear-gradient(180deg, rgba(12,18,24,0.45) 0%, rgba(12,18,24,0.28) 38%, rgba(12,18,24,0.72) 100%), linear-gradient(95deg, rgba(12,18,24,0.55) 0%, rgba(12,18,24,0.18) 60%, rgba(138,106,44,0.2) 100%)",
           }}
         />
         <div
           className="absolute inset-x-0 bottom-0 h-44"
           style={{
-            background: "linear-gradient(180deg, transparent, rgba(176, 138, 60, 0.22))",
+            background: "linear-gradient(180deg, transparent, rgba(176, 138, 60, 0.18))",
           }}
         />
       </div>
