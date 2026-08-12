@@ -20,6 +20,12 @@ import {
   type Client,
   type ClientKind,
 } from "@/lib/clients";
+import {
+  buildPicksMessage,
+  shareMaxUrl,
+  shareTelegramUrl,
+  shareWhatsAppUrl,
+} from "@/lib/share-picks";
 
 type Draft = {
   name: string;
@@ -589,30 +595,72 @@ export function CrmApp() {
                 </div>
 
                 {(editing.picks?.length ?? 0) > 0 ? (
-                  <ul className="space-y-2 border-t border-[var(--line)] pt-3">
-                    {editing.picks.map((pick) => (
-                      <li
-                        key={pick.id}
-                        className="flex items-start justify-between gap-2 rounded-xl bg-[var(--surface)] px-3 py-2"
-                      >
+                  <div className="space-y-3 border-t border-[var(--line)] pt-3">
+                    <div>
+                      <p className="mb-2 text-sm font-semibold">Отправить подбор клиенту</p>
+                      <p className="mb-2 text-xs text-[var(--muted)]">
+                        Откроется мессенджер с готовым текстом и ссылками. В WhatsApp — сразу на
+                        номер клиента, если он указан.
+                      </p>
+                      <div className="grid grid-cols-3 gap-2">
                         <a
-                          href={pick.url}
+                          href={shareWhatsAppUrl(
+                            buildPicksMessage(editing.picks, editing.name),
+                            editing.phone,
+                          )}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="min-w-0 flex-1 text-sm font-medium text-[var(--accent-deep)] underline-offset-2 hover:underline"
+                          className="rounded-xl border border-[var(--line)] bg-[var(--surface)] px-2 py-3 text-center text-sm font-semibold"
                         >
-                          {pick.title}
+                          WhatsApp
                         </a>
-                        <button
-                          type="button"
-                          onClick={() => removePick(pick.id)}
-                          className="shrink-0 text-xs text-red-700"
+                        <a
+                          href={shareTelegramUrl(
+                            buildPicksMessage(editing.picks, editing.name),
+                            editing.picks[0]?.url,
+                          )}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="rounded-xl border border-[var(--line)] bg-[var(--surface)] px-2 py-3 text-center text-sm font-semibold"
                         >
-                          Удалить
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
+                          Telegram
+                        </a>
+                        <a
+                          href={shareMaxUrl(buildPicksMessage(editing.picks, editing.name))}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="rounded-xl border border-[var(--line)] bg-[var(--surface)] px-2 py-3 text-center text-sm font-semibold"
+                        >
+                          Max
+                        </a>
+                      </div>
+                    </div>
+
+                    <ul className="space-y-2">
+                      {editing.picks.map((pick) => (
+                        <li
+                          key={pick.id}
+                          className="flex items-start justify-between gap-2 rounded-xl bg-[var(--surface)] px-3 py-2"
+                        >
+                          <a
+                            href={pick.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="min-w-0 flex-1 text-sm font-medium text-[var(--accent-deep)] underline-offset-2 hover:underline"
+                          >
+                            {pick.title}
+                          </a>
+                          <button
+                            type="button"
+                            onClick={() => removePick(pick.id)}
+                            className="shrink-0 text-xs text-red-700"
+                          >
+                            Удалить
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 ) : null}
               </div>
             ) : null}
