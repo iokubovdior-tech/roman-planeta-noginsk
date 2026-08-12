@@ -4,10 +4,13 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react
 import {
   AVITO_CATEGORY_LABEL,
   AVITO_CITY_LABEL,
+  AVITO_ROOMS_LABEL,
   buildAvitoSearchUrl,
+  categorySupportsRooms,
   defaultCategoryForClientKind,
   type AvitoCategory,
   type AvitoCity,
+  type AvitoRooms,
 } from "@/lib/avito";
 import {
   CLIENT_KIND_LABEL,
@@ -38,6 +41,7 @@ type Draft = {
 type AvitoDraft = {
   city: AvitoCity;
   category: AvitoCategory;
+  rooms: AvitoRooms;
   priceMin: string;
   priceMax: string;
   query: string;
@@ -56,6 +60,7 @@ const emptyDraft = (): Draft => ({
 const emptyAvito = (kind: ClientKind = "buyer"): AvitoDraft => ({
   city: "noginsk",
   category: defaultCategoryForClientKind(kind),
+  rooms: "2",
   priceMin: "",
   priceMax: "",
   query: "",
@@ -116,12 +121,24 @@ export function CrmApp() {
       buildAvitoSearchUrl({
         city: avito.city,
         category: avito.category,
+        rooms: categorySupportsRooms(avito.category) ? avito.rooms : "",
         priceMin: parseMoney(avito.priceMin),
         priceMax: parseMoney(avito.priceMax),
         query: avito.query || undefined,
       }),
     [avito],
   );
+
+  async function copySearchUrl() {
+    try {
+      await navigator.clipboard.writeText(liveSearchUrl);
+      setFlash("Ссылка поиска скопирована");
+      window.setTimeout(() => setFlash(""), 2000);
+    } catch {
+      setFlash("Не удалось скопировать — скопируйте вручную ниже");
+      window.setTimeout(() => setFlash(""), 2500);
+    }
+  }
 
   function openCreate() {
     setEditing(null);
@@ -490,8 +507,8 @@ export function CrmApp() {
               <div className="mt-5 space-y-3 rounded-2xl border border-[var(--line)] bg-[var(--paper)] p-4">
                 <p className="font-[family-name:var(--font-display)] text-xl">Подбор на Авито</p>
                 <p className="text-xs text-[var(--muted)]">
-                  Собираем ссылку поиска → открываете Авито → сохраняете понравившиеся варианты к
-                  клиенту.
+                  Комнаты и цена уходят в фильтры Авито. Район — в поиск. Если приложение открылось
+                  без фильтров — вставьте скопированную ссылку в Safari/Chrome.
                 </p>
 
                 <Field label="Город">
@@ -514,7 +531,13 @@ export function CrmApp() {
                   <select
                     value={avito.category}
                     onChange={(e) =>
-                      setAvito((a) => ({ ...a, category: e.target.value as AvitoCategory }))
+                      setAvito((a) => ({
+                        ...a,
+                        category: e.target.value as AvitoCategory,
+                        rooms: categorySupportsRooms(e.target.value as AvitoCategory)
+                          ? a.rooms || "2"
+                          : "",
+                      }))
                     }
                     className="w-full rounded-xl border border-[var(--line)] bg-[var(--paper)] px-4 py-3 text-base outline-none focus:border-[var(--accent)]"
                   >
@@ -525,6 +548,25 @@ export function CrmApp() {
                     ))}
                   </select>
                 </Field>
+
+                {categorySupportsRooms(avito.category) ? (
+                  <Field label="Комнаты (фильтр Авито)">
+                    <select
+                      value={avito.rooms}
+                      onChange={(e) =>
+                        setAvito((a) => ({ ...a, rooms: e.target.value as AvitoRooms }))
+                      }
+                      className="w-full rounded-xl border border-[var(--line)] bg-[var(--paper)] px-4 py-3 text-base outline-none focus:border-[var(--accent)]"
+                    >
+                      <option value="">Любые</option>
+                      {(Object.keys(AVITO_ROOMS_LABEL) as Exclude<AvitoRooms, "">[]).map((r) => (
+                        <option key={r} value={r}>
+                          {AVITO_ROOMS_LABEL[r]}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+                ) : null}
 
                 <div className="grid grid-cols-2 gap-2">
                   <Field label="Цена от">
@@ -547,23 +589,32 @@ export function CrmApp() {
                   </Field>
                 </div>
 
-                <Field label="Запрос (комнаты / район)">
+                <Field label="Район / улица (поиск)">
                   <input
                     value={avito.query}
                     onChange={(e) => setAvito((a) => ({ ...a, query: e.target.value }))}
                     className="w-full rounded-xl border border-[var(--line)] bg-[var(--paper)] px-4 py-3 text-base outline-none focus:border-[var(--accent)]"
-                    placeholder="2-к Ильича"
+                    placeholder="Ильича, Текстилей"
                   />
                 </Field>
 
-                <a
-                  href={liveSearchUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex w-full items-center justify-center rounded-xl bg-[var(--accent)] px-4 py-3.5 text-center font-semibold text-[var(--button-ink)]"
-                >
-                  Открыть поиск на Авито
-                </a>
+                <div className="grid grid-cols-2 gap-2">
+                  <a
+                    href={liveSearchUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center rounded-xl bg-[var(--accent)] px-4 py-3.5 text-center font-semibold text-[var(--button-ink)]"
+                  >
+                    Открыть Авито
+                  </a>
+                  <button
+                    type="button"
+                    onClick={copySearchUrl}
+                    className="rounded-xl border border-[var(--line)] px-4 py-3.5 font-semibold"
+                  >
+                    Копировать ссылку
+                  </button>
+                </div>
 
                 <p className="break-all text-[11px] text-[var(--muted)]">{liveSearchUrl}</p>
 
